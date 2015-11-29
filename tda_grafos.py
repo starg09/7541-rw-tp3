@@ -1,6 +1,5 @@
 from collections import defaultdict
 
-
 class Grafo_mapa(object):
 
     class _Ciudad(object):
@@ -35,10 +34,10 @@ class Grafo_mapa(object):
     
     class _Ruta(object):
         """Arista del Grafo, modelada con los datos de una ruta"""
-        def __init__(self, id, ciudad1, ciudad2, distancia, puntaje):
+        def __init__(self, id, id_ciudad1, id_ciudad2, distancia, puntaje):
             self.id = id
-            self.ciudad1 = ciudad1
-            self.ciudad2 = ciudad2
+            self.id_ciudad1 = id_ciudad1
+            self.id_ciudad2 = id_ciudad2
             self.distancia = distancia
             self.puntaje = puntaje
         
@@ -58,4 +57,7 @@ class Grafo_mapa(object):
             """Devuelve el puntaje de la ruta"""
             return self.puntaje
         
-    def __init__(self, )
+    def __init__(self, lista_ciudades, lista_rutas):
+        self.grafo = defaultdict(set)
+        """Continuar"""
+
