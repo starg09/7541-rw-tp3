@@ -1,4 +1,5 @@
-from collections import defaultdict
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 class Ciudad(object):
     """Vertice del Grafo, modelado con los datos de una ciudad"""
@@ -14,6 +15,7 @@ class Ciudad(object):
         """Devuelve una tupla (longitud, latitud)"""
         return (self.longitud, self.latitud)
 
+
 class Ruta(object):
     """Almacena el puntaje y distancia de una ruta entre dos ciudades."""
     def __init__(self, nro_id, id_ciudad1, id_ciudad2, distancia, puntaje):
@@ -22,7 +24,8 @@ class Ruta(object):
         self.id_ciudad2 = id_ciudad2    # Un integer
         self.distancia = distancia      # Un integer
         self.puntaje = puntaje          # Un float
-    
+
     def ciudades(self):
         """Devuelve una tupla, con las ciudades que une (ciudad1, ciudad2)"""
-        return (self.ciudad1, self.ciudad2)
+        return (self.id_ciudad1, self.id_ciudad2)
+
