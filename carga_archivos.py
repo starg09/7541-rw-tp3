@@ -3,6 +3,7 @@
 
 from estructuras import *
 from parseo_csv import *
+from grafo import *
 from collections import defaultdict
 
 def cargar_ciudades(ruta_archivo):
@@ -30,15 +31,20 @@ def cargar_ciudades(ruta_archivo):
 
 
 
-def cargar_rutas(ruta_archivo):
+def cargar_rutas(ruta_archivo, ciudades):
 	"""
-	Carga todas las rutas en el csv dado, y devuelve un diccionario con los objetos
-	rutas creados apropiadamente.
+	Carga todas las rutas en el csv dado, y devuelve dos elementos: un diccionario con los objetos
+	Ruta creados apropiadamente, y un grafo con todas las conexiones entre las ciudades. 
 
 	Para acceder a un elemento de este diccionario, se debe buscar en la forma
 	"rutas[ciudad_A][ciudad_B]", siendo ciudad_A la ciudad de menor ID.
 
-	Si alguna ciudad carga erroneamente, la función devuelve None.
+	Si alguna ciudad carga erroneamente, la función devuelve None. También si una ruta tiene
+	misma ciudad de llegada que de salida, o si la ciudad no se encuentra en la lista (creada
+	previo a correr esta función)
+
+	Pre: Ciudades se generó mediante cargar_ciudades, y es una lista valida.
+	     ruta_archivo es una ruta valida.
 	"""
 	archivo = open(ruta_archivo, "r")
 
@@ -47,16 +53,26 @@ def cargar_rutas(ruta_archivo):
 	linea = archivo.readline()
 	
 	rutas = defaultdict(dict)
+	grafo = Grafo([])
+
 	while not (linea == ""):
 		nueva_ruta = parsear_ruta(linea)
-		if (nueva_ruta == None):
+		if (nueva_ruta == None) or (not(nueva_ruta.id_ciudad1 in ciudades)) or (not(nueva_ruta.id_ciudad2 in ciudades)):
 			del rutas
-			return None
-		if (nueva_ruta.ciudades()[0] < nueva_ruta.ciudades()[1]):
-			rutas[nueva_ruta.ciudades()[0]][nueva_ruta.ciudades()[1]] = nueva_ruta
+			del grafo
+			return None, None
+		if (nueva_ruta.id_ciudad1 < nueva_ruta.id_ciudad2):
+			rutas[nueva_ruta.id_ciudad1][nueva_ruta.id_ciudad2] = nueva_ruta
 		else:
-			rutas[nueva_ruta.ciudades()[1]][nueva_ruta.ciudades()[0]] = nueva_ruta
+			rutas[nueva_ruta.id_ciudad2][nueva_ruta.id_ciudad1] = nueva_ruta
+
+		grafo.agregar_aristas([nueva_ruta.ciudades()])
+
 		linea = archivo.readline()
 	archivo.close()
+	
+	#print grafo
 
-	return rutas
+	return rutas, grafo
+
+
