@@ -9,7 +9,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 class Grafo(object):
 	"""
-	Estructura grafo. Se utiliza defaultdict para evitar tener que los campos se creen solo a medida que se necesita.
+	Estructura grafo. Se utiliza defaultdict para que los campos se creen por si solos a medida que se necesiten.
 
 	"aristas" es una lista de tuplas entre nodos. Los nodos pueden nombrarse con un string o con un integer.
 	"unsentido" establece si los las aristas tienen sentido o no. (Por defecto van en ambos sentidos)
@@ -17,9 +17,9 @@ class Grafo(object):
 	def __init__(self, aristas, unsentido=False):
 		self._grafo = defaultdict(set)
 		self._unsentido = unsentido
-		self.agregar_arista(aristas)	
+		self.agregar_aristas(aristas)
 
-	def agregar_arista(self, aristas):
+	def agregar_aristas(self, aristas):
 		"""
 		Agrega la lista de aristas entregada al grafo
 		"""
@@ -48,7 +48,7 @@ class Grafo(object):
 		except KeyError:
 			pass
 	def __str__(self):
-		return '{}({})'.format(self.__class__.__name__, dict(self._graph))
+		return '{}({})'.format(self.__class__.__name__, dict(self._grafo))
 
 def main():
     pass
