@@ -29,3 +29,8 @@ class Ruta(object):
         """Devuelve una tupla, con las ciudades que une (ciudad1, ciudad2)"""
         return (self.id_ciudad1, self.id_ciudad2)
 
+    def __cmp__(self,otro):
+        """Funcion de comparacion entre rutas"""
+        if self.distancia < otro.distancia:
+            return self
+        return otro
