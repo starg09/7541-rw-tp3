@@ -4,6 +4,7 @@
 from estructuras import *
 from parseo_csv import *
 from grafo import *
+from heapq import heappush
 from collections import defaultdict
 
 def cargar_ciudades(ruta_archivo):
@@ -52,12 +53,12 @@ def cargar_rutas(ruta_archivo, ciudades):
 	archivo.readline()
 	linea = archivo.readline()
 	
-	rutas = defaultdict(defaultdict(list))
+	rutas = defaultdict(lambda: defaultdict(list))
 	grafo = Grafo([])
 
 	while not (linea == ""):
 		nueva_ruta = parsear_ruta(linea)
-		if (nueva_ruta == None) or (not(nueva_ruta.id_ciudad1 in ciudades)) or (not(nueva_ruta.id_ciudad2 in ciudades)):
+		if (nueva_ruta is None) or (not(nueva_ruta.id_ciudad1 in ciudades)) or (not(nueva_ruta.id_ciudad2 in ciudades)):
 			del rutas
 			del grafo
 			return None, None
@@ -71,7 +72,9 @@ def cargar_rutas(ruta_archivo, ciudades):
 		linea = archivo.readline()
 	archivo.close()
 	
-	#print grafo
+	# for ciudad1 in rutas:
+	# 	for ciudad2, lista in rutas[ciudad1].iteritems():
+	# 		print ciudad1, " - ", ciudad2, ": ", len(rutas[ciudad1][ciudad2])
 
 	return rutas, grafo
 
