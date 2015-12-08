@@ -1,5 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from estructuras import *
+from heapq import *
+
+
 def puntaje_heuristico(inicio, fin, rutas, ciudades):
     """Devuelve el puntaje heuristico de las ciudad pasada por parametro"""
     #NO SE QUE CARAJO USAR
