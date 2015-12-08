@@ -1,19 +1,12 @@
-Prim (Grafo G)
-       /* Inicializamos todos los nodos del grafo. 
-       La distancia la ponemos a infinito y el padre de cada nodo a NULL
-        Encolamos, en una cola de prioridad 
-                  donde la prioridad es la distancia, 
-               todas las parejas <nodo,distancia> del grafo*/
-       por cada u en V[G] hacer
-           distancia[u] = INFINITO
-           padre[u] = NULL
-           Añadir(cola,<u,distancia[u]>)
-       distancia[u]=0
-       mientras !esta_vacia(cola) hacer
-           // OJO: Se entiende por mayor prioridad aquel nodo cuya distancia[u] es menor.
-           u = extraer_minimo(cola) //devuelve el minimo y lo elimina de la cola.
-           por cada v adyacente a 'u' hacer
-               si ((v ∈ cola) && (distancia[v] > peso(u, v)) entonces
-                   padre[v] = u
-                   distancia[v] = peso(u, v)
-                   Actualizar(cola,<v,distancia[v]>)
+def prim(inicio, rutas, ciudades):
+    mst = set()
+    por_visitar = []
+    visitados = set(inicio)
+    heappush(por_visitar, (0,inicio))
+    while (len(por_visitar) != 0):
+        actual = heappop(por_visitar)
+        if (actual[1] not in visitados):
+            union(visitados,set(actual[1]))
+            for id_vecino, rutas in rutas[actual[1]]:
+
+
