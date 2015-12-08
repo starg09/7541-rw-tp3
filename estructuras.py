@@ -18,12 +18,12 @@ class Ciudad(object):
 
 class Ruta(object):
     """Almacena el puntaje y distancia de una ruta entre dos ciudades."""
-    def __init__(self, nro_id, id_ciudad1, id_ciudad2, distancia, puntaje):
+    def __init__(self, nro_id, id_ciudad1, id_ciudad2, puntaje, distancia):
         self.id = nro_id                # Un integer
         self.id_ciudad1 = id_ciudad1    # Un integer
         self.id_ciudad2 = id_ciudad2    # Un integer
-        self.distancia = distancia      # Un integer
-        self.puntaje = puntaje          # Un float
+        self.puntaje = puntaje          # Un integer
+        self.distancia = distancia      # Un float
 
     def ciudades(self):
         """Devuelve una tupla, con las ciudades que une (ciudad1, ciudad2)"""
@@ -33,6 +33,6 @@ class Ruta(object):
         """Funcion de comparacion entre rutas"""
         if self.distancia < otro.distancia:
             return -1
-        if self.distancia < otro.distancia:
+        if self.distancia > otro.distancia:
             return 1
         return 0
