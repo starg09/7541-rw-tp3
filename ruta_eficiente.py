@@ -34,15 +34,15 @@ def camino_minimo(inicio, fin, rutas, ciudades):
     puntaje_f[inicio] = puntaje_heuristico(inicio, fin, rutas, ciudades)
     heappush(por_visitar, (puntaje_f[inicio], inicio))
     while (len(por_visitar) != 0):
-        actual := heappop(por_visitar)
-        if actual[1] = fin
+        actual = heappop(por_visitar)
+        if actual[1] = fin:
             return reconstruir_camino(predecesores, fin) 
         visitados.union(set(actual[1])) 
         for id_vecino, ruta in rutas[actual[1]]: 
-            if id_vecino in visitados	
+            if id_vecino in visitados:
                 continue
             puntaje_g_parcial = puntaje_g[actual[1]] + rutas[actual[1]][id_vecino].distancia
-            else if puntaje_g_parcial >= puntaje_g[id_vecino] 
+            if puntaje_g_parcial >= puntaje_g[id_vecino]:
                 continue
             predecesores[id_vecino] = actual
             puntaje_g[id_vecino] = puntaje_g_parcial

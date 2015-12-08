@@ -52,7 +52,7 @@ def cargar_rutas(ruta_archivo, ciudades):
 	archivo.readline()
 	linea = archivo.readline()
 	
-	rutas = defaultdict(dict)
+	rutas = defaultdict(defaultdict(list))
 	grafo = Grafo([])
 
 	while not (linea == ""):
@@ -62,9 +62,9 @@ def cargar_rutas(ruta_archivo, ciudades):
 			del grafo
 			return None, None
 		if (nueva_ruta.id_ciudad1 < nueva_ruta.id_ciudad2):
-			rutas[nueva_ruta.id_ciudad1][nueva_ruta.id_ciudad2] = nueva_ruta
+			heappush(rutas[nueva_ruta.id_ciudad1][nueva_ruta.id_ciudad2], nueva_ruta)
 		else:
-			rutas[nueva_ruta.id_ciudad2][nueva_ruta.id_ciudad1] = nueva_ruta
+			heappush(rutas[nueva_ruta.id_ciudad2][nueva_ruta.id_ciudad1], nueva_ruta)
 
 		grafo.agregar_aristas([nueva_ruta.ciudades()])
 

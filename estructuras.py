@@ -32,5 +32,7 @@ class Ruta(object):
     def __cmp__(self,otro):
         """Funcion de comparacion entre rutas"""
         if self.distancia < otro.distancia:
-            return self
-        return otro
+            return -1
+        if self.distancia < otro.distancia:
+            return 1
+        return 0
