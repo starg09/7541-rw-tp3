@@ -6,11 +6,17 @@ from heapq import *
 
 def puntaje_heuristico(inicio, fin, rutas, ciudades):
     """Devuelve el puntaje heuristico de las ciudad pasada por parametro"""
-    #NO SE QUE CARAJO USAR
+    try: 
+        embotellamientos = (ciudades[inicio].habitantes + ciudades[fin].habitantes) / (rutas[min(inicio,fin)][max(inicio,fin)][0].distancia)
+        felicidad = (0.0 + rutas[min(inicio,fin)][max(inicio,fin)][0].puntaje) / (ciudades[inicio].habitantes + ciudades[fin].habitantes)
+        return (felicidad / embotellamientos)*(10**6)
+    except:
+        #print "ERROR"
+        return 0
     
 def reconstruir_camino(predecesores, actual):
     camino_final = [actual]
-    while actual in predecesores:
+    while actual in predecesores.keys():
         actual = predecesores[actual]
         camino_final.append(actual)
     return camino_final
@@ -27,26 +33,34 @@ def camino_minimo(inicio, fin, rutas, ciudades):
     puntaje_g = {}     #Diccioneario donde se guardaran los puntajes g
     puntaje_f = {}     #Diccioneario donde se guardaran los puntajes f
 
-    for id_ciudad, ciudad in ciudades:
+    for id_ciudad, ciudad in ciudades.iteritems():
         puntaje_g[id_ciudad] = float("inf")
         puntaje_f[id_ciudad] = float("inf")   
-    puntaje_g[inicio] = 0
+    puntaje_g[inicio] = 0.0
     puntaje_f[inicio] = puntaje_heuristico(inicio, fin, rutas, ciudades)
     heappush(por_visitar, (puntaje_f[inicio], inicio))
     while (len(por_visitar) != 0):
         actual = heappop(por_visitar)
-        if actual[1] = fin:
+        if actual[1] == fin:
             return reconstruir_camino(predecesores, fin) 
-        visitados.union(set(actual[1])) 
-        for id_vecino, ruta in rutas[actual[1]]: 
+        visitados = visitados.union([actual[1]])
+        for id_vecino, lista_rutas in rutas[actual[1]].iteritems(): 
             if id_vecino in visitados:
                 continue
-            puntaje_g_parcial = puntaje_g[actual[1]] + rutas[actual[1]][id_vecino].distancia
-            if puntaje_g_parcial >= puntaje_g[id_vecino]:
+            try:
+                puntaje_g_parcial = puntaje_g[actual[1]] + lista_rutas[0].distancia
+            except:
                 continue
-            predecesores[id_vecino] = actual
+            
+            #print puntaje_g_parcial, " vs ", puntaje_g[id_vecino]
+
+            if puntaje_g_parcial >= puntaje_g[id_vecino]:
+                #print "SALTEO"
+                continue
+            predecesores[id_vecino] = actual[1]
             puntaje_g[id_vecino] = puntaje_g_parcial
             puntaje_f[id_vecino] = puntaje_g[id_vecino] + puntaje_heuristico(id_vecino, fin, rutas, ciudades)
+            #print actual[1], ": ", puntaje_f[id_vecino], " vs ", puntaje_g[id_vecino], " (", puntaje_heuristico(id_vecino, fin, rutas, ciudades), ")"
             heappush(por_visitar, (puntaje_f[id_vecino], id_vecino))
 
     return None
