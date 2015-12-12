@@ -3,7 +3,7 @@
 
 from estructuras import *
 
-def exportar_ruta_a_kml(rutas, ciudades, id_ciudad1, id_ciudad2):
+def exportar_ruta_a_kml(ciudades, id_ciudad1, id_ciudad2):
 
 	f = open("ruta_" + id_ciudad1 + "_" + id_ciudad2 + ".kml", "w")
 
