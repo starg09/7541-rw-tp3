@@ -6,6 +6,16 @@ from heapq import *
 from grafo import *
 from collections import defaultdict
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def calcular_comodidad(inicio, fin, rutas, ciudades):
     """Devuelve el puntaje heuristico de las ciudad pasada por parametro"""
     try: 
@@ -74,7 +84,7 @@ def obtener_rutas_optimas(rutas, ciudades):
 
 
 
-	print rutas_agregadas, "rutas seleccionadas de", rutas_totales, "totales"
+	print "\t" + bcolors.OKGREEN + bcolors.BOLD, rutas_agregadas, "rutas seleccionadas de", rutas_totales, "totales." + bcolors.ENDC
 	return rutas_optimas, grafo_opt
 
 

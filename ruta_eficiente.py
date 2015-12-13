@@ -12,7 +12,7 @@ def reconstruir_camino(predecesores, actual):
     camino_final = [actual]
     while actual in predecesores.keys():
         actual = predecesores[actual]
-        camino_final.append(actual)
+        camino_final.insert(0, actual)
     return camino_final
     
 def camino_minimo(inicio, fin, rutas, ciudades, grafo):

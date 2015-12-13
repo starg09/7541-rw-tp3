@@ -2,39 +2,55 @@
 # -*- coding: utf-8 -*-
 
 from estructuras import *
+from ruta_eficiente import *
+import os
 
-def exportar_ruta_a_kml(ciudades, id_ciudad1, id_ciudad2):
+def exportar_ruta_a_kml(ciudades, rutas, grafo, id_ciudad1, id_ciudad2):
 
-	f = open("ruta_" + id_ciudad1 + "_" + id_ciudad2 + ".kml", "w")
+	if (None in [ciudades, rutas, grafo]):
+		return None
 
-	f.write("<?xml version="1.0" encoding="UTF-8"?>\n")
-	f.write("<kml xmlns="http://earth.google.com/kml/2.1">\n")
+	if not os.path.exists("./Archivos_KML/"):
+		os.makedirs("./Archivos_KML/")
+
+	ruta_ideal = camino_minimo(id_ciudad1, id_ciudad2, rutas, ciudades, grafo)
+
+	print ruta_ideal
+
+	f = open("./Archivos_KML/ruta_" + str(id_ciudad1) + "_" + str(id_ciudad2) + ".kml", "w")
+
+	f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+	f.write("<kml xmlns=\"http://earth.google.com/kml/2.1\">\n")
 	f.write("<Document>\n")
-	f.write("   <name>" + "Ruta desde" + ciudades[id_ciudad1].nombre + "hasta" + ciudades[id_ciudad2].nombre + ".kml" +"</name>\n")
+	f.write("\t<name>" + "Ruta desde" + ciudades[id_ciudad1].nombre + "hasta" + ciudades[id_ciudad2].nombre + ".kml" +"</name>\n")
 
-	f.write("   <Placemark>\n")
-    f.write("       <name>" + ciudades[id_ciudad1].nombre + "</name>\n")
-    f.write("       <description>" + "Habitantes: " + ciudades[id_ciudad1].habitantes + "</description>\n")
-    f.write("       <Point>\n")
-    f.write("           <coordinates>" + ciudades[id_ciudad1].latitud + ", " + ciudades[id_ciudad1].longitud + "</coordinates>\n")
-    f.write("       </Point>\n")
-    f.write("   </Placemark>\n")
+	f.write("\t<Placemark>\n")
+	f.write("\t\t<name>" + ciudades[id_ciudad1].nombre + "</name>\n")
+	f.write("\t\t<description>" + "Habitantes: " + str(ciudades[id_ciudad1].habitantes) + "</description>\n")
+	f.write("\t\t<Point>\n")
+	f.write("\t\t\t<coordinates>" + str(ciudades[id_ciudad1].longitud) + ", " + str(ciudades[id_ciudad1].latitud) + "</coordinates>\n")
+	f.write("\t\t</Point>\n")
+	f.write("\t</Placemark>\n")
 
-	f.write("   <Placemark>\n")
-    f.write("       <name>" + ciudades[id_ciudad2].nombre + "</name>\n")
-    f.write("       <description>" + "Habitantes: " + ciudades[id_ciudad2].habitantes + "</description>\n")
-    f.write("       <Point>\n")
-    f.write("           <coordinates>" + ciudades[id_ciudad2].latitud + ", " + ciudades[id_ciudad2].longitud + "</coordinates>\n")
-    f.write("       </Point>\n")
-    f.write("   </Placemark>\n")
+	f.write("\t<Placemark>\n")
+	f.write("\t\t<name>" + ciudades[id_ciudad2].nombre + "</name>\n")
+	f.write("\t\t<description>" + "Habitantes: " + str(ciudades[id_ciudad2].habitantes) + "</description>\n")
+	f.write("\t\t<Point>\n")
+	f.write("\t\t\t<coordinates>" + str(ciudades[id_ciudad2].longitud) + ", " + str(ciudades[id_ciudad2].latitud) + "</coordinates>\n")
+	f.write("\t\t</Point>\n")
+	f.write("\t</Placemark>\n")
 
-	f.write("	<Placemark>\n")
-    f.write("  		<LineString>\n")
-    f.write("      		<coordinates>" + ciudades[id_ciudad1].latitud + ", " + ciudades[id_ciudad1].longitud + " " + ciudades[id_ciudad2].latitud + ", " + ciudades[id_ciudad2].longitud + "</coordinates>\n")
-    f.write("       </LineString>\n")
-    f.write("	</Placemark>\n")
+	for idc in range(0, len(ruta_ideal)-1):
+		print idc, 
+		f.write("\t<Placemark>\n")
+		f.write("\t\t<LineString>\n")
+		f.write("\t\t\t<coordinates>" + str(ciudades[ruta_ideal[idc]].longitud) + ", " + str(ciudades[ruta_ideal[idc]].latitud) + " " + str(ciudades[ruta_ideal[idc + 1]].longitud) + ", " + str(ciudades[ruta_ideal[idc + 1]].latitud) + "</coordinates>\n")
+		f.write("\t\t</LineString>\n")
+		f.write("\t</Placemark>\n")
 
 	f.write("</Document>\n")
 	f.write("</kml>\n")
 
 	f.close()
+
+	print "\n\n\tArchivo creado en \"./Archivos_KML/ruta_" + str(id_ciudad1) + "_" + str(id_ciudad2) + ".kml\"\n"

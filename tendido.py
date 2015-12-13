@@ -61,7 +61,7 @@ def kruskal(rutas, ciudades):
         if buscar_padre(ciudad1, padre) != buscar_padre(ciudad2, padre):
             unir_ramas(ciudad1, ciudad2, padre, nivel)
             arbol.add((ciudad1, ciudad2))
-    return arbol
+    return list(arbol)
 
 
 
