@@ -6,13 +6,7 @@ from heapq import *
 
 def puntaje_heuristico(inicio, fin, rutas, ciudades):
     """Devuelve el puntaje heuristico de las ciudad pasada por parametro"""
-    try: 
-        embotellamientos = (ciudades[inicio].habitantes + ciudades[fin].habitantes) / (rutas[min(inicio,fin)][max(inicio,fin)][0].distancia)
-        felicidad = (0.0 + rutas[min(inicio,fin)][max(inicio,fin)][0].puntaje) / (ciudades[inicio].habitantes + ciudades[fin].habitantes)
-        return (felicidad / embotellamientos)*(10**6)
-    except:
-        #print "ERROR"
-        return 0
+    return 0
     
 def reconstruir_camino(predecesores, actual):
     camino_final = [actual]
@@ -21,7 +15,7 @@ def reconstruir_camino(predecesores, actual):
         camino_final.append(actual)
     return camino_final
     
-def camino_minimo(inicio, fin, rutas, ciudades):
+def camino_minimo(inicio, fin, rutas, ciudades, grafo):
     """Devuelve una lista con el camino mas corto y de menor coste entre inicio y fin (ambas ciudades de nuestro grafo)
     Pre: inicio, fin son las IDs de las ciudades; rutas es un diccionario con objetos Ruta (rutas[id_ciudad1][id_ciudad2]), y ciudades es un diccionario con objetos Ciudad (ciudades[id_ciudad])
     Post: se devolvio una lista con los id_ciudad de las ciudades que conforman el camino minimo en orden (inicio -> .... -> fin) o None si no hay ciudades
@@ -44,18 +38,21 @@ def camino_minimo(inicio, fin, rutas, ciudades):
         if actual[1] == fin:
             return reconstruir_camino(predecesores, fin) 
         visitados = visitados.union([actual[1]])
-        for id_vecino, lista_rutas in rutas[actual[1]].iteritems(): 
+        #print grafo._grafo[actual[1]]
+        for id_vecino in grafo._grafo[actual[1]]:
             if id_vecino in visitados:
+                #print "SALTEO 1 (Ciudad ya visitada, evitando ciclo)"
                 continue
             try:
-                puntaje_g_parcial = puntaje_g[actual[1]] + lista_rutas[0].distancia
+                puntaje_g_parcial = puntaje_g[actual[1]] + rutas[min(actual[1], id_vecino)][max(actual[1], id_vecino)][0].distancia
             except:
+                #print "SALTEO 2 (Ruta Inexistente)"
                 continue
             
             #print puntaje_g_parcial, " vs ", puntaje_g[id_vecino]
 
             if puntaje_g_parcial >= puntaje_g[id_vecino]:
-                #print "SALTEO"
+                #print "SALTEO 3"
                 continue
             predecesores[id_vecino] = actual[1]
             puntaje_g[id_vecino] = puntaje_g_parcial
@@ -63,4 +60,5 @@ def camino_minimo(inicio, fin, rutas, ciudades):
             #print actual[1], ": ", puntaje_f[id_vecino], " vs ", puntaje_g[id_vecino], " (", puntaje_heuristico(id_vecino, fin, rutas, ciudades), ")"
             heappush(por_visitar, (puntaje_f[id_vecino], id_vecino))
 
+    print "ERROR: Ruta no encontrada ( Dist.:", puntaje_g[actual[1]], ")"
     return None
