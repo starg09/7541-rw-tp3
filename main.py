@@ -57,7 +57,9 @@ def main():
 
 	char = si_o_no(bcolors.WARNING + bcolors.BOLD + "\n\n¿Buscar mejor tendido para el cableado electrico?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
 	if char in ["s", "S"]:
-		print bcolors.OKGREEN + bcolors.BOLD + "\n\nMejor tendido encontrado:", bcolors.ENDC + str(calcular_tendido_minimo_electrico(rutas_opt, ciudades)), "\n\n\n"
+		mejor_tendido = calcular_tendido_minimo_electrico(rutas_opt, ciudades)
+		print bcolors.OKGREEN + bcolors.BOLD + "\n\nMejor tendido encontrado:", bcolors.ENDC + str(mejor_tendido), "\n\n\n"
+		exportar_tendido_a_kml(ciudades, rutas_opt, grafo_opt, mejor_tendido)
 
 
 main()
