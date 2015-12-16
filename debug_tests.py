@@ -55,6 +55,13 @@ def main():
 
 
 
+	char = si_o_no(bcolors.WARNING + bcolors.BOLD + "\n\n¿Calcular mejor ruta entre todo par de ciudades?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
+	if char in ["s", "S"]:
+		for ciudad1 in ciudades.keys():
+			for ciudad2 in ciudades.keys():
+				if (ciudad1 != ciudad2):
+					print "\n\n\n", camino_minimo(ciudad1, ciudad2, rutas, ciudades, grafo), "vs", camino_minimo(ciudad1, ciudad2, rutas_opt, ciudades, grafo_opt), "\n"
+
 	char = si_o_no(bcolors.WARNING + bcolors.BOLD + "\n\n¿Buscar mejor tendido para el cableado electrico?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
 	if char in ["s", "S"]:
 		mejor_tendido = calcular_tendido_minimo_electrico(rutas_opt, ciudades)

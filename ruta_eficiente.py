@@ -7,7 +7,7 @@ from math import *
 
 def puntaje_heuristico(inicio, fin, rutas, ciudades):
     """Devuelve el puntaje heuristico de las ciudad pasada por parametro"""
-    return sqrt((ciudades[fin].longitud - ciudades[inicio].longitud)**2 + (ciudades[fin].latitud - ciudades[inicio].latitud)**2)
+    return sqrt((ciudades[fin].longitud - ciudades[inicio].longitud)**2 + (ciudades[fin].latitud - ciudades[inicio].latitud)**2)*100
     
 def reconstruir_camino(predecesores, actual):
     camino_final = [actual]
