@@ -22,21 +22,14 @@ def exportar_ruta_a_kml(ciudades, rutas, grafo, id_ciudad1, id_ciudad2):
 	f.write("<Document>\n")
 	f.write("\t<name>" + "Ruta desde" + ciudades[id_ciudad1].nombre + "hasta" + ciudades[id_ciudad2].nombre + ".kml" +"</name>\n")
 
-	f.write("\t<Placemark>\n")
-	f.write("\t\t<name>" + ciudades[id_ciudad1].nombre + "</name>\n")
-	f.write("\t\t<description>" + "Habitantes: " + str(ciudades[id_ciudad1].habitantes) + "</description>\n")
-	f.write("\t\t<Point>\n")
-	f.write("\t\t\t<coordinates>" + str(ciudades[id_ciudad1].longitud) + ", " + str(ciudades[id_ciudad1].latitud) + "</coordinates>\n")
-	f.write("\t\t</Point>\n")
-	f.write("\t</Placemark>\n")
-
-	f.write("\t<Placemark>\n")
-	f.write("\t\t<name>" + ciudades[id_ciudad2].nombre + "</name>\n")
-	f.write("\t\t<description>" + "Habitantes: " + str(ciudades[id_ciudad2].habitantes) + "</description>\n")
-	f.write("\t\t<Point>\n")
-	f.write("\t\t\t<coordinates>" + str(ciudades[id_ciudad2].longitud) + ", " + str(ciudades[id_ciudad2].latitud) + "</coordinates>\n")
-	f.write("\t\t</Point>\n")
-	f.write("\t</Placemark>\n")
+	for idc in range(0, len(ruta_ideal)):
+		f.write("\t<Placemark>\n")
+		f.write("\t\t<name>" + ciudades[ruta_ideal[idc]].nombre + "</name>\n")
+		f.write("\t\t<description>" + "Habitantes: " + str(ciudades[ruta_ideal[idc]].habitantes) + "</description>\n")
+		f.write("\t\t<Point>\n")
+		f.write("\t\t\t<coordinates>" + str(ciudades[ruta_ideal[idc]].longitud) + ", " + str(ciudades[ruta_ideal[idc]].latitud) + "</coordinates>\n")
+		f.write("\t\t</Point>\n")
+		f.write("\t</Placemark>\n")
 
 	for idc in range(0, len(ruta_ideal)-1):
 		f.write("\t<Placemark>\n")
@@ -53,15 +46,15 @@ def exportar_ruta_a_kml(ciudades, rutas, grafo, id_ciudad1, id_ciudad2):
 	print "\n\n\tArchivo creado en \"./Archivos_KML/ruta_" + str(id_ciudad1) + "_" + str(id_ciudad2) + ".kml\"\n"
 
 
-def exportar_tendido_a_kml(ciudades, rutas, grafo, conexiones):
+def exportar_conexiones_a_kml(ruta, ciudades, conexiones):
 
-	if (None in [ciudades, rutas, grafo, conexiones]):
+	if (None in [ruta, ciudades, conexiones]):
 		return None
 
 	if not os.path.exists("./Archivos_KML/"):
 		os.makedirs("./Archivos_KML/")
 
-	f = open("./Archivos_KML/cableado_tendido_minimo.kml", "w")
+	f = open("./Archivos_KML/" + ruta, "w")
 
 	f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 	f.write("<kml xmlns=\"http://earth.google.com/kml/2.1\">\n")
@@ -89,4 +82,4 @@ def exportar_tendido_a_kml(ciudades, rutas, grafo, conexiones):
 
 	f.close()
 
-	print "\n\n\tArchivo creado en \"./Archivos_KML/cableado_tendido_minimo.kml\"\n"
+	print "\tArchivo creado en \"" + ruta + "\""

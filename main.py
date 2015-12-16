@@ -29,37 +29,57 @@ def main():
 	print "\n"
 	rutas_opt, grafo_opt = obtener_rutas_optimas(rutas, ciudades)
 	
-	# Modulo de mejores rutas
-	char = si_o_no(bcolors.WARNING + bcolors.BOLD + "\n\n¿Calcular mejor ruta entre un par de ciudades?\n" + bcolors.ENDC + "\t(Todas las rutas vs rutas optimas)\n" + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
-	while not(char in ["n", "N"]):
-		if char in ["s", "S"]:
-			ciudades_validas = False
-			while not(ciudades_validas):
-				try:
-					id1 = int(raw_input("\nIngrese ID de Ciudad nro. 1: "))
-					id2 = int(raw_input("\nIngrese ID de Ciudad nro. 2: "))
-					ciudades_validas = True
-				except:
-					char = si_o_no(bcolors.FAIL + bcolors.BOLD + "\n\nERROR: ID no válido. ¿Desea intentar nuevamente?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
-					if (char in ["n", "N"]):
-						ciudades_validas = True #No son validas, pero así cierra el while, y lo siguiente no se cumple por el char.
-		if char in ["s", "S"]:
-			#print "\n\n\n", camino_minimo(id1, id2, rutas, ciudades, grafo), "vs", camino_minimo(id1, id2, rutas_opt, ciudades, grafo_opt), "\n"
+	print bcolors.OKGREEN + bcolors.BOLD + "\n\nRed Optimizada creada.\n\n" + bcolors.ENDC
+
+	conexiones_red_opt = []
+	for ciudad_1 in grafo_opt._grafo.keys():
+		for ciudad_2 in grafo_opt._grafo[ciudad_1]:
+			if (ciudad_1 < ciudad_2):
+				break
+			conexiones_red_opt.append((ciudad_2, ciudad_1))
+
+	exportar_conexiones_a_kml("red.kml", ciudades, conexiones_red_opt)
+
+
+	mejor_tendido = calcular_tendido_minimo_electrico(rutas_opt, ciudades)
+	print bcolors.OKGREEN + bcolors.BOLD + "\n\nRéd electrica de tendido minimo encontrada.\n\n" + bcolors.ENDC
+	exportar_conexiones_a_kml("tendido.kml", ciudades, mejor_tendido)
+	print ""
+
+	cam_min = None
+	while (cam_min == None):
+		ciudades_validas = False
+		id1 = -1
+		id2 = -1
+		while (not(ciudades_validas)):
+			try:
+				id1 = int(raw_input("\nIngrese ID de Ciudad nro. 1: "))
+				if not(1 <= id1 <= len(ciudades.keys())):
+					raise ValueError
+				id2 = int(raw_input("\nIngrese ID de Ciudad nro. 2: "))
+				if not(1 <= id2 <= len(ciudades.keys())):
+					raise ValueError
+				ciudades_validas = True
+			except:
+				char = si_o_no(bcolors.FAIL + bcolors.BOLD + "\n\nERROR: ID no válido. ¿Desea intentar nuevamente?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
+				if (char in ["n", "N"]):
+					ciudades_validas = True #No son validas, pero así cierra el while, y lo siguiente no se cumple por el char.
+
+		if not( (id1 < 0) or (id2 < 0) ):
 			cam_min = camino_minimo(id1, id2, rutas_opt, ciudades, grafo_opt)
-			print bcolors.OKGREEN + bcolors.BOLD + "\n\n\nMejor Ruta Encontrada entre ciudades", str(id1), "y", str(id2) + ": " + bcolors.ENDC + str(cam_min), "\n"
-			char = si_o_no(bcolors.BOLD + "\n\n¿Desea guardar un archivo KML con la ruta?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
-			if char in ["s", "S"]:
+			if (cam_min != None):
+				print bcolors.OKGREEN + bcolors.BOLD + "\n\nMejor Ruta Encontrada entre ciudades", str(id1), "y", str(id2) + ": " + bcolors.ENDC + str(cam_min), ""
 				exportar_ruta_a_kml(ciudades, rutas_opt, grafo_opt, id1, id2)
+				print ""
+			else:
+				char = si_o_no(bcolors.FAIL + bcolors.BOLD + "\n\nERROR: No se encontró ninguna ruta válida entre esas ciudades. (Esto no debería suceder)\n\t¿Desea intentar nuevamente?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
+				if (char in ["n", "N"]):
+					cam_min = True #No son validas, pero así cierra el while, y lo siguiente no se cumple por el char.
+		else:
+			cam_min = True
+	
 
-			char = si_o_no(bcolors.BOLD + "\n\n¿Desea buscar otra ruta diferente?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
 
-
-
-	char = si_o_no(bcolors.WARNING + bcolors.BOLD + "\n\n¿Buscar mejor tendido para el cableado electrico?\n" + bcolors.ENDC + bcolors.HEADER + "\t[sS/nN]\n\t" + bcolors.ENDC)
-	if char in ["s", "S"]:
-		mejor_tendido = calcular_tendido_minimo_electrico(rutas_opt, ciudades)
-		print bcolors.OKGREEN + bcolors.BOLD + "\n\nMejor tendido encontrado:", bcolors.ENDC + str(mejor_tendido), "\n\n\n"
-		exportar_tendido_a_kml(ciudades, rutas_opt, grafo_opt, mejor_tendido)
 
 
 main()
